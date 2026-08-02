@@ -1,7 +1,26 @@
 aid: westock
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/westock.png
 name: WeStock
-description: WeStock is a company surfaced as a portfolio company of techstars and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: WeStock is a shopper-marketing platform that helps consumer packaged goods (CPG)
+  brands drive product trial, build first-party retail audiences, and manage trade and shopper
+  marketing strategy from a single dashboard. It combines digital rebates and promotional
+  campaigns, paid social advertising (primarily Meta), in-store sampling and demos, retail
+  media management across Amazon, Walmart, and Instacart, email/SMS automation, and influencer
+  marketing, alongside a consumer discovery web app used by 600,000+ shoppers to browse new
+  products. Campaign data — trials, conversions, and repeat behavior — is unified in one place.
+  A Techstars-backed company; its public surface is a marketing site and login-gated dashboard,
+  with a private backend API (api.westock.io) that is not publicly documented.
 url: https://raw.githubusercontent.com/api-evangelist/westock/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,9 +30,15 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
+- Shopper Marketing
+- Consumer Packaged Goods
+- Retail Media
+- Marketing
+- Rebates
+- Audience Building
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -23,3 +48,20 @@ maintainers:
 common:
 - type: Website
   url: https://westock.io/
+- type: Pricing
+  url: https://westock.io/pricing
+- type: Blog
+  url: https://westock.io/blog
+- type: TermsOfService
+  url: https://westock.io/terms
+- type: PrivacyPolicy
+  url: https://westock.io/privacy
+- type: SignUp
+  url: https://dashboard.westock.io/
+- type: DomainSecurity
+  url: security/westock-domain-security.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: minimal
+  artifacts_added: 1
+  pass: local-v1
