@@ -1,0 +1,155 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+provider: WeStock
+providerId: westock
+created: '2026-08-12'
+modified: '2026-08-12'
+generated: '2026-08-12'
+method: searched
+source: https://www.westock.io/pricing
+sources:
+  - https://www.westock.io/pricing
+tags:
+  - Shopper Marketing
+  - Consumer Packaged Goods
+  - Rebates
+  - Retail Media
+plan_count: 3
+pricing_model: contact-sales
+currency: USD
+description: >-
+  WeStock publishes three named platform tiers on its pricing page — Essential,
+  Growth and Scale — but publishes NO price for any of them: every tier's call to
+  action is "Contact Us / Book a demo". What the page does publish is the
+  entitlement ladder (storefront credits, rebate scope, consumer contact
+  downloads) and the contract term attached to each tier, plus two real overage
+  rates for additional storefront credits. These are platform/SaaS plans for CPG
+  brands, not API plans — WeStock does not publish an API, so there is no
+  developer tier, no request quota, and no metered API pricing anywhere on this
+  page. Values below are transcribed verbatim from the published pricing page on
+  2026-08-12; nothing is inferred.
+notes:
+  - Every tier is quote-only. No list price, no per-seat price, and no free tier
+    or self-serve signup is published; the only self-serve entry point on the site
+    is the consumer-side app (app.westock.io), not the brand platform.
+  - The "storefront credit" is the unit of account across the Growth and Scale
+    tiers and is the only metered/overage dimension WeStock publishes.
+  - Contract term is a published, differentiating attribute of each tier
+    (month-to-month / 90-day minimum / 12-month) and is captured here as a plan
+    limit because it is the commitment a buyer is quoted against.
+plans:
+  - id: westock-essential
+    name: Essential
+    type: subscription
+    price: null
+    price_display: Contact Us
+    currency: USD
+    billing_period: monthly
+    contract_term: month-to-month
+    cta: Book a demo
+    description: Great for brands focused on opening up new retail accounts.
+    entries:
+      - label: Capture meaningful data
+        name: data_capture
+        type: feature
+      - label: Survey and Request Acquisition Tools
+        name: survey_request_tools
+        type: feature
+      - label: Dashboard Access
+        name: dashboard_access
+        type: feature
+      - label: QR & Link Builder
+        name: qr_link_builder
+        type: feature
+      - label: Consumer Discovery
+        name: consumer_discovery
+        type: feature
+    limits:
+      - label: Agreement term
+        name: agreement_term
+        value: Month to month Agreement
+      - label: Storefront credits
+        name: storefront_credits
+        value: null
+        note: Not included at this tier; storefront credits begin at Growth.
+  - id: westock-growth
+    name: Growth
+    type: subscription
+    price: null
+    price_display: Contact Us
+    currency: USD
+    billing_period: monthly
+    contract_term: 90-day-minimum
+    cta: Book a demo
+    description: For brands expanding and scaling retail growth.
+    inherits: westock-essential
+    entries:
+      - label: All Essential Tools
+        name: essential_tools
+        type: feature
+      - label: Rebates for WeStock storefronts only
+        name: rebates_westock_storefronts
+        type: feature
+      - label: Consumer contact downloads
+        name: consumer_contact_downloads
+        type: feature
+    limits:
+      - label: Storefront credits included
+        name: storefront_credits
+        value: 6
+        unit: credit
+      - label: Additional storefront credit
+        name: storefront_credit_overage
+        value: 250
+        unit: credit
+        currency: USD
+        price_display: $250 per additional storefront credit
+      - label: Rebate campaign scope
+        name: rebate_scope
+        value: WeStock storefronts only
+      - label: Agreement term
+        name: agreement_term
+        value: 90-Day Minimum Agreement
+  - id: westock-scale
+    name: Scale
+    type: subscription
+    price: null
+    price_display: Contact Us
+    currency: USD
+    billing_period: monthly
+    contract_term: 12-month
+    cta: Book a demo
+    description: Great for brands requiring creative and strategic support.
+    inherits: westock-growth
+    entries:
+      - label: All Growth Tools
+        name: growth_tools
+        type: feature
+      - label: Unlimited Rebate Campaigns To Any Store
+        name: unlimited_rebate_campaigns
+        type: feature
+      - label: Creative and strategic support
+        name: creative_strategic_support
+        type: feature
+    limits:
+      - label: Storefront credits included
+        name: storefront_credits
+        value: 12
+        unit: credit
+      - label: Additional storefront
+        name: storefront_credit_overage
+        value: 150
+        unit: credit
+        currency: USD
+        price_display: $150 per additional storefront
+      - label: Rebate campaign scope
+        name: rebate_scope
+        value: Unlimited Rebate Campaigns To Any Store
+      - label: Agreement term
+        name: agreement_term
+        value: 12-Month Agreement
+api_plans:
+  count: 0
+  note: >-
+    WeStock publishes no API plan, developer tier, request quota or metered API
+    pricing. The pricing page describes platform access for CPG brands only.

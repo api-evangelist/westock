@@ -1,0 +1,230 @@
+generated: '2026-08-12'
+method: probed
+source: live HTTP probes of every WeStock host reachable on 2026-08-12
+description: >-
+  Results of probing the /.well-known/ discovery surface across every WeStock host
+  found in apis.yml and via Certificate Transparency (api.certspotter.com,
+  domain=westock.io, include_subdomains=true). NOTHING WAS FOUND. Not one host
+  serves a real document at any /.well-known/ path, so no WellKnown, SecurityTxt,
+  APICatalog or AgentCard pointer is wired into apis.yml — this file records a
+  measured ABSENCE, not a presence.
+  Three distinct failure shapes are represented below and they are not
+  interchangeable:
+    - westock.io / www.westock.io (Webflow) answers 404 with an
+      "Invalid .well-known request" HTML page for every path.
+    - api.westock.io answers 401 "Unauthorized" (text/plain, 12 bytes) for EVERY
+      path including the site root — the entire host is credential-gated, so the
+      probe cannot distinguish "no document" from "document behind auth".
+    - dashboard.westock.io, dashboard2.westock.io, labs.westock.io and
+      engage.westock.io are single-page apps whose catch-all returns HTTP 200 with
+      a text/html shell for every path, INCLUDING /.well-known/agent-card.json and
+      /.well-known/agent.json. These 200s are SPA shells, not documents, and are
+      explicitly recorded as misses. This is the dominant false-positive shape for
+      agent-card discovery and it is rejected here per the pipeline contract.
+hosts:
+  - host: https://westock.io
+    kind: marketing site (Webflow)
+    note: >-
+      All paths 301 to https://www.westock.io. Webflow serves a custom
+      "Invalid .well-known request" 404 body for the entire /.well-known/ tree.
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /security.txt
+        status: 404
+        note: 301 to www.westock.io/security.txt, which 404s.
+      - path: /llms.txt
+        status: 404
+        note: 301 to www.westock.io/llms.txt, which 404s.
+      - path: /robots.txt
+        status: 200
+        type: text/plain
+        note: >-
+          Served, but contains only a Sitemap: directive
+          (https://www.westock.io/sitemap.xml). Not a discovery document; not saved.
+      - path: /sitemap.xml
+        status: 200
+        type: application/rss+xml
+        note: >-
+          Real Webflow sitemap, 92 marketing/resource URLs, no developer or API
+          page among them. Used as evidence for the coverage finding; not a
+          /.well-known/ document, so not indexed as one.
+  - host: https://api.westock.io
+    kind: private backend API (Node/Express behind helmet)
+    note: >-
+      Every path, including "/", returns HTTP 401 with the 12-byte text/plain body
+      "Unauthorized". The host is real and hardened — the response carries HSTS
+      (max-age=15552000; includeSubDomains), a restrictive Content-Security-Policy,
+      Cross-Origin-Embedder-Policy: require-corp, Cross-Origin-Opener-Policy:
+      same-origin, X-Content-Type-Options: nosniff, X-Frame-Options: SAMEORIGIN and
+      Referrer-Policy: no-referrer — but it publishes no anonymous discovery
+      surface of any kind.
+    documents:
+      - path: /.well-known/security.txt
+        status: 401
+      - path: /.well-known/openid-configuration
+        status: 401
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+      - path: /.well-known/oauth-protected-resource
+        status: 401
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/ai-plugin.json
+        status: 401
+      - path: /.well-known/agent-card.json
+        status: 401
+      - path: /.well-known/agent.json
+        status: 401
+      - path: /llms.txt
+        status: 401
+      - path: /robots.txt
+        status: 401
+  - host: https://dashboard.westock.io
+    kind: brand dashboard SPA
+    note: >-
+      Catch-all SPA. Returns 200 text/html for every path probed. Every 200 below
+      is an HTML shell, NOT a document — recorded as a miss.
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        type: text/html
+        document: false
+      - path: /.well-known/openid-configuration
+        status: 200
+        type: text/html
+        document: false
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        type: text/html
+        document: false
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        type: text/html
+        document: false
+      - path: /.well-known/api-catalog
+        status: 200
+        type: text/html
+        document: false
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        type: text/html
+        document: false
+      - path: /.well-known/agent-card.json
+        status: 200
+        type: text/html
+        document: false
+      - path: /.well-known/agent.json
+        status: 200
+        type: text/html
+        document: false
+      - path: /llms.txt
+        status: 200
+        type: text/html
+        document: false
+      - path: /robots.txt
+        status: 200
+        type: text/plain
+        document: true
+        note: >-
+          The one genuinely-typed file on this host — the stock Create React App
+          robots.txt (User-agent: * / Disallow:). Carries no discovery information.
+  - host: https://app.westock.io
+    kind: consumer discovery web app (Next.js)
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+      - path: /llms.txt
+        status: 404
+      - path: /robots.txt
+        status: 404
+  - host: https://labs.westock.io
+    kind: WeStock Labs SPA
+    note: >-
+      Catch-all SPA — 200 text/html shell for every path including
+      /.well-known/agent-card.json. Recorded as misses. Its backing API host,
+      https://api.labs.westock.io, returned 503 from awselb/2.0 on every path at
+      probe time (no healthy targets behind the load balancer).
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 200
+        type: text/html
+        document: false
+  - host: https://engage.westock.io
+    kind: SPA
+    note: Catch-all SPA — 200 text/html shell for every path. Recorded as misses.
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 200
+        type: text/html
+        document: false
+  - host: https://dashboard2.westock.io
+    kind: SPA
+    note: Catch-all SPA — 200 text/html shell for every path. Recorded as misses.
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 200
+        type: text/html
+        document: false
+  - host: https://consumer.westock.io
+    kind: SPA
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 404
+  - host: https://processing.westock.io
+    kind: web app
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 404
+  - host: https://login.westock.io
+    kind: hosted identity (JSON 404 envelope, "This URL doesn't exist on the ...")
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 404
+        note: >-
+          Notable miss — this host answers with a JSON error envelope rather than
+          HTML, so the 404 is authoritative: no OIDC discovery document is served
+          at the login host.
+      - path: /.well-known/agent-card.json
+        status: 404
+summary:
+  hosts_probed: 10
+  documents_found: 0
+  agent_card_found: false
+  security_txt_found: false
+  openid_configuration_found: false
+  api_catalog_found: false
+  pointers_emitted: []
+  pointer_note: >-
+    No WellKnown, SecurityTxt, APICatalog or AgentCard pointer is wired into
+    apis.yml. Every 200 observed was an SPA HTML shell or a stock robots.txt;
+    every credible path returned 401 or 404. Emitting a pointer here would assert
+    a discovery surface WeStock does not serve.

@@ -12,15 +12,21 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/westock.png
 name: WeStock
-description: WeStock is a shopper-marketing platform that helps consumer packaged goods (CPG)
+description: >-
+  WeStock is a shopper-marketing platform that helps consumer packaged goods (CPG)
   brands drive product trial, build first-party retail audiences, and manage trade and shopper
   marketing strategy from a single dashboard. It combines digital rebates and promotional
   campaigns, paid social advertising (primarily Meta), in-store sampling and demos, retail
   media management across Amazon, Walmart, and Instacart, email/SMS automation, and influencer
   marketing, alongside a consumer discovery web app used by 600,000+ shoppers to browse new
   products. Campaign data — trials, conversions, and repeat behavior — is unified in one place.
-  A Techstars-backed company; its public surface is a marketing site and login-gated dashboard,
-  with a private backend API (api.westock.io) that is not publicly documented.
+  A Techstars-backed company; its entire public surface is a Webflow marketing site, a Help Scout
+  knowledge base of product how-tos, and login-gated dashboard and consumer apps. WeStock runs a
+  real first-party backend at api.westock.io — hardened Node/Express that answers HTTP 401 on
+  every path including the root — but ships no developer program: no API reference, no OpenAPI or
+  GraphQL schema, no SDK on any registry, no webhooks, and no API pricing. Its documented
+  integrations run the other way: WeStock consumes Klaviyo and Attentive using keys the customer
+  pastes into the WeStock dashboard.
 url: https://raw.githubusercontent.com/api-evangelist/westock/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -30,7 +36,7 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-12'
 tags:
 - Company
 - Shopper Marketing
@@ -39,6 +45,10 @@ tags:
 - Marketing
 - Rebates
 - Audience Building
+- Trade Promotion
+- First-Party Data
+- Retail
+- Advertising
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -47,21 +57,120 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://westock.io/
+  url: https://www.westock.io/
 - type: Pricing
-  url: https://westock.io/pricing
+  url: https://www.westock.io/pricing
+- type: Plans
+  url: plans/westock-plans-pricing.yml
 - type: Blog
-  url: https://westock.io/blog
+  url: https://www.westock.io/resources
+- type: HelpCenter
+  url: https://westock.helpscoutdocs.com/
+- type: Support
+  url: https://westock.helpscoutdocs.com/
 - type: TermsOfService
-  url: https://westock.io/terms
+  url: https://www.westock.io/terms-of-service
 - type: PrivacyPolicy
-  url: https://westock.io/privacy
+  url: https://www.westock.io/privacy-policy
 - type: SignUp
-  url: https://dashboard.westock.io/
+  url: https://dashboard.westock.io/login
+- type: LLMsTxt
+  url: llms/westock-llms.txt
 - type: DomainSecurity
   url: security/westock-domain-security.yml
 x-enrichment:
-  date: '2026-07-21'
+  date: '2026-08-12'
   status: minimal
-  artifacts_added: 1
+  artifacts_added: 3
   pass: local-v1
+x-coverage:
+  state: none
+  reason: no-developer-program
+  detail: >-
+    WeStock runs a real first-party backend at api.westock.io that answers HTTP 401
+    "Unauthorized" on every path including the root, but ships nothing for developers —
+    the marketing site has no /developers, /docs or /api page anywhere in its 92-URL
+    sitemap, and the Help Scout knowledge base's only "API key" article is about pasting
+    a customer's own Klaviyo key into the WeStock dashboard.
+  evidence:
+  - url: https://api.westock.io/openapi.json
+    status: 401
+  - url: https://api.westock.io/
+    status: 401
+  - url: https://api.labs.westock.io/
+    status: 503
+  - url: https://www.westock.io/sitemap.xml
+    status: 200
+  - url: https://westock.io/.well-known/agent-card.json
+    status: 404
+  - url: https://westock.io/llms.txt
+    status: 404
+  - url: https://webapi.westock.io/
+    status: 502
+  checked: '2026-08-12'
+x-contract-discovery:
+  checked: '2026-08-12'
+  result: no-published-contract
+  method: probed
+  note: >-
+    Subdomains enumerated from Certificate Transparency
+    (api.certspotter.com/v1/issuances?domain=westock.io&include_subdomains=true), then every
+    production host probed for /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json,
+    /api/openapi.json, /api-docs, /docs, /redoc, /rapidoc, /graphql and the /.well-known/ tree.
+    No OpenAPI, Swagger, GraphQL SDL, AsyncAPI, MCP server, agent card or Postman collection
+    exists. Every HTTP 200 observed on a spec path was an SPA HTML shell (labs., engage.,
+    dashboard., dashboard2.) and was rejected, not saved.
+  hosts:
+  - host: api.westock.io
+    status: 401
+    note: hardened Node/Express (helmet); 401 on every path including /
+  - host: api.labs.westock.io
+    status: 503
+    note: '"Westock Labs API" per search; awselb/2.0 returns 503 — no healthy targets'
+  - host: dashapi.westock.io
+    status: 502
+  - host: dashapi2.westock.io
+    status: 502
+  - host: webapi.westock.io
+    status: 502
+  - host: labs.westock.io
+    status: 200
+    note: SPA catch-all — HTML shell on every spec and .well-known path; rejected
+  - host: engage.westock.io
+    status: 200
+    note: SPA catch-all; rejected
+  - host: dashboard.westock.io
+    status: 200
+    note: SPA catch-all; rejected
+  - host: dashboard2.westock.io
+    status: 200
+    note: SPA catch-all; rejected
+  - host: app.westock.io
+    status: 404
+  - host: consumer.westock.io
+    status: 404
+  - host: processing.westock.io
+    status: 404
+  - host: login.westock.io
+    status: 404
+    note: JSON 404 envelope — authoritative; no OIDC discovery document served
+  registries_checked:
+  - registry: npm
+    result: no first-party package
+  - registry: pypi
+    result: 404
+  - registry: postman
+    result: 0 results for "westock" across all Postman entity types
+  github:
+  - account: https://github.com/WeStock
+    type: Organization
+    created: '2015-07-25'
+    public_repos: 1
+    verdict: >-
+      NOT WIRED — created four years before the platform; its single public repo is a 2015
+      fork shell of an unrelated project (dontlivetwice/westock). Ownership unproven.
+  - account: https://github.com/WeStockApp
+    type: Organization
+    created: '2022-11-30'
+    public_repos: 0
+    verdict: NOT WIRED — zero public repos and no identifying metadata; ownership unproven.
