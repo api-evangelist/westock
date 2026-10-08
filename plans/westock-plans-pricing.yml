@@ -153,3 +153,28 @@ api_plans:
   note: >-
     WeStock publishes no API plan, developer tier, request quota or metered API
     pricing. The pricing page describes platform access for CPG brands only.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - subscription
+  units: []
+  plans:
+  - name: Essential
+    access: other
+    model: subscription
+    model_how: stated
+    units: []
+    periods: []
+  - name: Growth
+    access: other
+    model: subscription
+    model_how: stated
+    units: []
+    periods: []
+  - name: Scale
+    access: other
+    model: subscription
+    model_how: stated
+    units: []
+    periods: []
